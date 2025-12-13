@@ -14,7 +14,7 @@ jobs:
     
     # Substitua 'atlas_capital_data_pipeline' pelo nome exato da sua pasta de projeto dbt
     env:
-      DBT_PROJECT_DIR:./atlas_capital_data_pipeline 
+      DBT_PROJECT_DIR: ./atlas_capital_data_pipeline 
 
     steps:
       - name: Checkout Code
