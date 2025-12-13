@@ -52,7 +52,7 @@ jobs:
       - name: Run dbt (Transformations and Tests)
         run: |
           # O profiles.yml e o dbt_project.yml precisam do PROJECT_ID
-          dbt run --profiles-dir. --project-dir $DBT_PROJECT_DIR
-          dbt test --profiles-dir. --project-dir $DBT_PROJECT_DIR
+          dbt run --profiles-dir . --project-dir $DBT_PROJECT_DIR
+          dbt test --profiles-dir . --project-dir $DBT_PROJECT_DIR
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
