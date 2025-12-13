@@ -45,8 +45,8 @@ jobs:
       - name: Run Python Ingestion Script (E & L)
         run: |
           python src/ingestion_pipeline.py
-        env:
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Necessário para o script Python
+#        env:
+#          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Necessário para o script Python
 
       # PASSO 2: EXECUÇÃO DO DBT (T & Testes)
       - name: Run dbt (Transformations and Tests)
