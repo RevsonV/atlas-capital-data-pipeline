@@ -1,0 +1,58 @@
+#.github/workflows/pipeline_daily.yml
+
+name: Daily ELT Pipeline Run (Atlas Capital)
+
+on:
+  schedule:
+    # Executa diariamente ao meio-dia UTC. Ajuste para um horário de sua preferência.
+    - cron: '0 12 * * *' 
+  workflow_dispatch: # Permite que você o rode manualmente para testes
+
+jobs:
+  run_pipeline:
+    runs-on: ubuntu-latest
+    
+    # Substitua 'atlas_capital_data_pipeline' pelo nome exato da sua pasta de projeto dbt
+    env:
+      DBT_PROJECT_DIR:./atlas_capital_data_pipeline 
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Python and dbt Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Instala as bibliotecas de Python + dbt-bigquery e seus utilitários
+          pip install pandas pandas-gbq requests python-dotenv
+          pip install dbt-bigquery
+          dbt deps # Instala o dbt-utils
+
+      - name: Authenticate GCP/BigQuery (Key Injection)
+        # Decodifica a chave Base64 (seu segredo) e a salva temporariamente.
+        run: |
+          echo "${{ secrets.GCP_SA_KEY_BASE64 }}" | base64 --decode > gcp_sa_key.json
+          # Define a variável de ambiente GOOGLE_APPLICATION_CREDENTIALS, necessária para autenticação
+          echo "GOOGLE_APPLICATION_CREDENTIALS=gcp_sa_key.json" >> $GITHUB_ENV
+          
+      # PASSO 1: EXECUÇÃO DO PYTHON (E & L)
+      - name: Run Python Ingestion Script (E & L)
+        run: |
+          python src/ingestion_pipeline.py
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Necessário para o script Python
+
+      # PASSO 2: EXECUÇÃO DO DBT (T & Testes)
+      - name: Run dbt (Transformations and Tests)
+        run: |
+          # O profiles.yml e o dbt_project.yml precisam do PROJECT_ID
+          dbt run --profiles-dir. --project-dir $DBT_PROJECT_DIR
+          dbt test --profiles-dir. --project-dir $DBT_PROJECT_DIR
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}

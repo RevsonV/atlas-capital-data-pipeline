@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: world_bank_raw # Nome lógico da sua fonte (ex: world_bank_raw)
+    database: "{{ env_var('GCP_PROJECT_ID') }}" # Reutiliza a variável de ambiente para o GCP Project ID
+    schema: raw_atlas_capital # O dataset do BigQuery onde o Python carregou os dados
+    
+    tables:
+      - name: stg_indicadores_brutos # O nome da tabela carregada na Sprint 1
+        description: "Tabela bruta de indicadores macroeconômicos do World Bank. Contém dados extraídos via script Python, no formato original da API (long-format), com uma linha por país/indicador/ano."

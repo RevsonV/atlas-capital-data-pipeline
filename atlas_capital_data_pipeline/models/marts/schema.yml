@@ -1,0 +1,57 @@
+version: 2
+models:
+  # ----------------------------------------------------------------------
+  # DIMENSÕES
+  # ----------------------------------------------------------------------
+  - name: dim_pais
+    description: "Tabela dimensional contendo atributos descritivos dos países monitorados pelo Atlas Capital."
+    columns:
+      - name: country_key
+        description: "Chave primária (PK) única para a dimensão País."
+        tests:
+          - unique # Garante que cada país seja único
+          - not_null # Garante que a chave nunca seja nula
+      - name: country_code
+        description: "Código ISO do país (Ex: BRA, MEX)."
+        tests:
+          - unique
+
+  - name: dim_tempo
+    description: "Tabela dimensional de tempo, utilizada para filtros e agrupamentos por ano."
+    columns:
+      - name: time_key
+        description: "Chave primária (PK) única, correspondente ao ano."
+        tests:
+          - unique
+          - not_null
+      - name: year_number
+        description: "O ano do indicador (formato YYYY)."
+#        tests:
+          # Teste opcional: Garante que os anos estejam em um intervalo razoável
+#          - accepted_values:
+#              values: 
+
+  # ----------------------------------------------------------------------
+  # FATOS (Métricas e Chaves Estrangeiras)
+  # ----------------------------------------------------------------------
+  - name: fact_indicadores_economicos
+    description: "Tabela Fato central que armazena todas as métricas macroeconômicas (PIB, Inflação, etc.)."
+    columns:
+      - name: time_key
+        description: "Chave estrangeira (FK) para a dim_tempo."
+        tests:
+          - not_null
+          - relationships: # Teste RELACIONAMENTO: Garante integridade referencial!
+              to: ref('dim_tempo')
+              field: time_key
+      - name: country_key
+        description: "Chave estrangeira (FK) para a dim_pais."
+        tests:
+          - not_null
+          - relationships: # Teste RELACIONAMENTO: Garante integridade referencial!
+              to: ref('dim_pais')
+              field: country_key
+      - name: gdp_current_usd
+        description: "Produto Interno Bruto (PIB) em US$ correntes."
+        tests:
+          - not_null

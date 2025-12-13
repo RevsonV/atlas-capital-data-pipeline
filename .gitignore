@@ -1,0 +1,31 @@
+# Environment variables
+.env
+.env.local
+
+# Credenciais e arquivos sensíveis
+dbt_service_account.json
+terraform.tfstate
+terraform.tfstate.*
+terraform.tfvars
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+
+# dbt
+dbt_modules/
+target/
+logs/
+dbt_packages/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# Sistema
+.DS_Store
+.vscode/
