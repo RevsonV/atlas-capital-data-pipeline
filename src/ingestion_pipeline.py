@@ -3,17 +3,17 @@ import requests
 import pandas as pd
 import pandas_gbq
 import logging
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # 1. Configuração de Logging (Observabilidade)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-load_dotenv()
+# load_dotenv()
 
 # 2. Credenciais de Segurança (Melhor Prática)
 # O pandas_gbq usa esta variável de ambiente para autenticar com o BigQuery
 # As variáveis de ambiente já foram carregadas por load_dotenv() acima
-GCP_SERVICE_ACCOUNT_KEY_PATH = os.getenv("GCP_SERVICE_ACCOUNT_KEY_PATH")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GCP_SERVICE_ACCOUNT_KEY_PATH
+# GCP_SERVICE_ACCOUNT_KEY_PATH = os.getenv("GCP_SERVICE_ACCOUNT_KEY_PATH")
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GCP_SERVICE_ACCOUNT_KEY_PATH
 
 # 3. Constantes do Projeto Atlas Capital
 # Os países alvo do fundo (exemplo)

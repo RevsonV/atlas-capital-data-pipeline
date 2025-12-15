@@ -26,14 +26,6 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      - name: Install Python and dbt Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          # Instala as bibliotecas de Python + dbt-bigquery e seus utilitários
-          pip install pandas pandas-gbq requests python-dotenv
-          pip install dbt-bigquery
-          dbt deps # Instala o dbt-utils
-
       - name: Authenticate GCP/BigQuery (Key Injection)
         # Decodifica a chave Base64 (seu segredo) e a salva temporariamente.
         run: |
@@ -45,8 +37,8 @@ jobs:
       - name: Run Python Ingestion Script (E & L)
         run: |
           python src/ingestion_pipeline.py
-#        env:
-#          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Necessário para o script Python
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Necessário para o script Python
 
       # PASSO 2: EXECUÇÃO DO DBT (T & Testes)
       - name: Run dbt (Transformations and Tests)
