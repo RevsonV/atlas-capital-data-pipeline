@@ -40,6 +40,24 @@ jobs:
           echo "${{ secrets.GCP_SA_KEY_BASE64 }}" | base64 --decode > gcp_sa_key.json
           # Define a variável de ambiente GOOGLE_APPLICATION_CREDENTIALS, necessária para autenticação
           echo "GOOGLE_APPLICATION_CREDENTIALS=gcp_sa_key.json" >> $GITHUB_ENV
+
+      # NOVO PASSO: CRIAÇÃO DO PROFILES.YML DINÂMICO
+      - name: Create dbt profiles.yml
+        run: |
+          # O comando 'cat << EOF > profiles.yml' cria o arquivo profiles.yml na raiz do workspace
+          cat << EOF > profiles.yml
+          atlas_capital_data_pipeline:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account-json
+                project: ${{ secrets.GCP_PROJECT_ID }}
+                dataset: stg_atlas_capital # Seu Target Schema de desenvolvimento
+                threads: 4
+                location: US
+                keyfile: gcp_sa_key.json # O NOME DO ARQUIVO SALVO NO PASSO ANTERIOR
+          EOF
           
       # PASSO 1: EXECUÇÃO DO PYTHON (E & L)
       - name: Run Python Ingestion Script (E & L)
