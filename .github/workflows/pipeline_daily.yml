@@ -14,7 +14,9 @@ jobs:
     
     # Substitua 'atlas_capital_data_pipeline' pelo nome exato da sua pasta de projeto dbt
     env:
-      DBT_PROJECT_DIR: ./atlas_capital_data_pipeline 
+      DBT_PROJECT_DIR: ./atlas_capital_data_pipeline
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_SA_KEY_BASE64: ${{ secrets.GCP_SA_KEY_BASE64 }} 
 
     steps:
       - name: Checkout Code
@@ -37,7 +39,7 @@ jobs:
       - name: Authenticate GCP/BigQuery (Key Injection)
         # Decodifica a chave Base64 (seu segredo) e a salva temporariamente.
         run: |
-          echo "${{ secrets.GCP_SA_KEY_BASE64 }}" | base64 --decode > gcp_sa_key.json
+          echo "$GCP_SA_KEY_BASE64" | base64 --decode > gcp_sa_key.json
           # Define a variável de ambiente GOOGLE_APPLICATION_CREDENTIALS, necessária para autenticação
           echo "GOOGLE_APPLICATION_CREDENTIALS=gcp_sa_key.json" >> $GITHUB_ENV
 
@@ -52,7 +54,7 @@ jobs:
               dev:
                 type: bigquery
                 method: service-account-json
-                project: ${{ secrets.GCP_PROJECT_ID }}
+                project: $GCP_PROJECT_ID
                 dataset: stg_atlas_capital # Seu Target Schema de desenvolvimento
                 threads: 4
                 location: US
@@ -63,8 +65,7 @@ jobs:
       - name: Run Python Ingestion Script (E & L)
         run: |
           python src/ingestion_pipeline.py
-        env:
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Necessário para o script Python
+
 
       # PASSO 2: EXECUÇÃO DO DBT (T & Testes)
       - name: Run dbt (Transformations and Tests)
@@ -73,5 +74,3 @@ jobs:
           # 2. Usamos a flag --profile e o caminho absoluto para profiles.yml
           dbt run --profiles-dir $GITHUB_WORKSPACE --project-dir $DBT_PROJECT_DIR --profile atlas_capital_data_pipeline
           dbt test --profiles-dir $GITHUB_WORKSPACE --project-dir $DBT_PROJECT_DIR --profile atlas_capital_data_pipeline
-        env:
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
