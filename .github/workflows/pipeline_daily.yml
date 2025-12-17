@@ -1,5 +1,3 @@
-#.github/workflows/pipeline_daily.yml
-
 name: Daily ELT Pipeline Run (Atlas Capital)
 
 on:
@@ -14,9 +12,7 @@ jobs:
     
     # Substitua 'atlas_capital_data_pipeline' pelo nome exato da sua pasta de projeto dbt
     env:
-      DBT_PROJECT_DIR: ./atlas_capital_data_pipeline
-      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      GCP_SA_KEY_BASE64: ${{ secrets.GCP_SA_KEY_BASE64 }} 
+      DBT_PROJECT_DIR: ./atlas_capital_data_pipeline 
 
     steps:
       - name: Checkout Code
@@ -38,6 +34,8 @@ jobs:
 
       - name: Authenticate GCP/BigQuery (Key Injection)
         # Decodifica a chave Base64 (seu segredo) e a salva temporariamente.
+        env:
+          GCP_SA_KEY_BASE64: ${{ secrets.GCP_SA_KEY_BASE64 }}
         run: |
           echo "$GCP_SA_KEY_BASE64" | base64 --decode > gcp_sa_key.json
           # Define a variável de ambiente GOOGLE_APPLICATION_CREDENTIALS, necessária para autenticação
@@ -45,8 +43,11 @@ jobs:
 
       # NOVO PASSO: CRIAÇÃO DO PROFILES.YML DINÂMICO
       - name: Create dbt profiles.yml
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
         run: |
           # O comando 'cat << EOF > profiles.yml' cria o arquivo profiles.yml na raiz do workspace
+          # Usamos variáveis de ambiente ($VAR) para evitar problemas de injeção e contexto
           cat << EOF > profiles.yml
           atlas_capital_data_pipeline:
             target: dev
@@ -63,12 +64,15 @@ jobs:
           
       # PASSO 1: EXECUÇÃO DO PYTHON (E & L)
       - name: Run Python Ingestion Script (E & L)
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Necessário para o script Python
         run: |
           python src/ingestion_pipeline.py
 
-
       # PASSO 2: EXECUÇÃO DO DBT (T & Testes)
       - name: Run dbt (Transformations and Tests)
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
         run: |
           # 1. O profiles.yml e o dbt_project.yml precisam do PROJECT_ID
           # 2. Usamos a flag --profile e o caminho absoluto para profiles.yml
