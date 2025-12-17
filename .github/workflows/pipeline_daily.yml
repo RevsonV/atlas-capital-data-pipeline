@@ -69,8 +69,9 @@ jobs:
       # PASSO 2: EXECUÇÃO DO DBT (T & Testes)
       - name: Run dbt (Transformations and Tests)
         run: |
-          # O profiles.yml e o dbt_project.yml precisam do PROJECT_ID
-          dbt run --profiles-dir . --project-dir $DBT_PROJECT_DIR
-          dbt test --profiles-dir . --project-dir $DBT_PROJECT_DIR
+          # 1. O profiles.yml e o dbt_project.yml precisam do PROJECT_ID
+          # 2. Usamos a flag --profile e o caminho absoluto para profiles.yml
+          dbt run --profiles-dir $GITHUB_WORKSPACE --project-dir $DBT_PROJECT_DIR --profile atlas_capital_data_pipeline
+          dbt test --profiles-dir $GITHUB_WORKSPACE --project-dir $DBT_PROJECT_DIR --profile atlas_capital_data_pipeline
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
