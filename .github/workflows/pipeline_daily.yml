@@ -41,25 +41,23 @@ jobs:
           # Define a variável de ambiente GOOGLE_APPLICATION_CREDENTIALS, necessária para autenticação
           echo "GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/gcp_sa_key.json" >> $GITHUB_ENV
 
-      # NOVO PASSO: CRIAÇÃO DO PROFILES.YML DINÂMICO
+      # PASSO 0: CRIAÇÃO DO PROFILES.YML DINÂMICO
       - name: Create dbt profiles.yml
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
         run: |
-          # O comando 'cat << EOF > profiles.yml' cria o arquivo profiles.yml na raiz do workspace
-          # Usamos variáveis de ambiente ($VAR) para evitar problemas de injeção e contexto
           cat << EOF > profiles.yml
           atlas_capital_data_pipeline:
             target: dev
             outputs:
               dev:
                 type: bigquery
-                method: service-account-json
+                method: service-account # <--- MUDANÇA CRUCIAL AQUI
                 project: $GCP_PROJECT_ID
-                dataset: stg_atlas_capital # Seu Target Schema de desenvolvimento
+                dataset: stg_atlas_capital
                 threads: 4
                 location: US
-                keyfile: $GITHUB_WORKSPACE/gcp_sa_key.json # O NOME DO ARQUIVO SALVO NO PASSO ANTERIOR
+                keyfile: $GITHUB_WORKSPACE/gcp_sa_key.json
           EOF
           
       # PASSO 1: EXECUÇÃO DO PYTHON (E & L)
