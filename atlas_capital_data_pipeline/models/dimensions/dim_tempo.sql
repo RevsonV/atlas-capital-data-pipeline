@@ -8,7 +8,6 @@
 SELECT DISTINCT
     indicator_year AS time_key, -- Chave Primária (PK)
     indicator_year AS year_number,
-    -- Adicionar colunas de ano fiscal, trimestre, etc., se a fonte permitisse, mas aqui nos limitamos ao ano.
     CAST(indicator_year AS STRING) AS year_label
 
 FROM 
