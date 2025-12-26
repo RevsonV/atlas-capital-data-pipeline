@@ -3,28 +3,20 @@ import requests
 import pandas as pd
 import pandas_gbq
 import logging
-# from dotenv import load_dotenv
 
-# 1. Configuração de Logging (Observabilidade)
+# 1. Configuração de Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-# load_dotenv()
 
-# 2. Credenciais de Segurança (Melhor Prática)
-# O pandas_gbq usa esta variável de ambiente para autenticar com o BigQuery
-# As variáveis de ambiente já foram carregadas por load_dotenv() acima
-# GCP_SERVICE_ACCOUNT_KEY_PATH = os.getenv("GCP_SERVICE_ACCOUNT_KEY_PATH")
-# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GCP_SERVICE_ACCOUNT_KEY_PATH
-
-# 3. Constantes do Projeto Atlas Capital
-# Os países alvo do fundo (exemplo)
+# 2. Constantes do Projeto Atlas Capital
+# Os países alvo do fundo
 PAISES_ALVO = ["BRA", "IND", "MEX", "IDN", "ZAF", "CHL"]
-# Os 5 KPIs definidos (como lista, não string)
+# Os 5 KPIs definidos
 INDICADORES_ATLAS = ["NY.GDP.MKTP.CD", "FP.CPI.TOTL.ZG", "SP.POP.TOTL", "GC.DOD.TOTL.GD.ZS", "SL.UEM.TOTL.ZS"]
 # Destino no BigQuery
 TABLE_ID = "raw_atlas_capital.stg_indicadores_brutos"
 PROJECT_ID = os.getenv("GCP_PROJECT_ID")
 
-# 4. URL Base e Otimização da Chamada (Foco na Eficiência)
+# 3. URL Base e Otimização da Chamada
 # A API World Bank requer uma chamada separada para cada país-indicador
 BASE_API_URL = "https://api.worldbank.org/v2/country/{country}/indicator/{indicator}?format=json&date=2000:2024&per_page=2000"
 
@@ -34,7 +26,7 @@ def extract_world_bank_data(countries, indicators):
     total_requests = len(countries) * len(indicators)
     request_count = 0
     
-    # Itera sobre cada combinação de país e indicador (para cada indicador de cada país)
+    # Itera sobre cada combinação de país e indicador (ação para cada indicador de cada país)
     for country in countries:
         for indicator in indicators:
             request_count += 1
@@ -97,7 +89,7 @@ def load_to_bigquery(df, table_id, project_id):
             df,
             table_id,
             project_id=project_id,
-            if_exists='replace', # Idempotência: substitui a tabela a cada execução
+            if_exists='replace',
             progress_bar=False
         )
         logging.info("Carga concluída com sucesso no BigQuery.")
