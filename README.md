@@ -52,7 +52,7 @@ O projeto segue o paradigma ELT (Extract, Load, Transform), priorizando o proces
 * **Situação:** Decisões de investimento baseadas em processos manuais e dados não validados.
 * **Tarefa:** Automatizar o fluxo fim a fim com custo zero de infraestrutura.
 * **Ação:** Implementei um pipeline ELT completo integrando Python, BigQuery e dbt com automação via GitHub Actions.
-* **Resultado:** Redução de 100% no esforço manual de coleta e 100% de confiança nos dados através de testes automatizados.
+* **Resultado:** Redução de 100% no esforço manual de coleta e 100% de confiança nos dados através de testes automatizados, além de <u>custo zero de infraestrutura</u>.
 
 ---
 
