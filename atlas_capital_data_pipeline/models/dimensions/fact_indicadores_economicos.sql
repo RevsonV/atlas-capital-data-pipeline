@@ -21,7 +21,7 @@ WITH pivoted_data AS (
     FROM 
         {{ ref('stg_indicadores_brutos') }} -- Referencia o modelo de staging
     
-    GROUP BY 1, 2
+    GROUP BY 1, 2, 3
 )
 
 SELECT
