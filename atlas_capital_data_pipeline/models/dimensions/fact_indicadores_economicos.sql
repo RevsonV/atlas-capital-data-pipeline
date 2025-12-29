@@ -8,6 +8,7 @@
 WITH pivoted_data AS (
     SELECT
         country_code,
+        country_name,
         indicator_year,
         
         -- PIVOT: Transforma Linhas de Indicadores em Colunas de Métricas
@@ -30,6 +31,7 @@ SELECT
     
     -- Atributos Descritivos (para facilitar a análise)
     p.country_code,
+    p.country_name,
     p.indicator_year,
     
     -- Métricas (Measures)
