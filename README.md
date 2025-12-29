@@ -2,7 +2,7 @@
 
 ---
 
-##💡 **Cenário de Negócio**
+## 💡 **Cenário de Negócio**
 
 Atlas Capital é uma empresa <u>fictícia</u>, um pequeno fundo de investimentos focado em mercados emergentes. Seu time de análise sofria com a fragmentação de dados, perdendo cerca de 60% do tempo na coleta manual de dados dos países alvo.
 
@@ -10,16 +10,15 @@ Atlas Capital é uma empresa <u>fictícia</u>, um pequeno fundo de investimentos
 
 ---
 
-##🏗️ **Arquitetura do Projeto (Modern Data Stack)**
+## 🏗️ **Arquitetura do Projeto (Modern Data Stack)**
 
 O projeto segue o paradigma ELT (Extract, Load, Transform), priorizando o processamento dentro do Data Warehouse para escalabilidade e baixo custo.
 
-**Fluxo:** World Bank API ➡️ Python (Ingestão) ➡️ BigQuery (Raw) ➡️ dbt Core (Transformação) ➡️ Looker Studio (BI)
 ![Lineage graph](image.png)
 
 ---
 
-##⚙️ **Stack Tecnológica**
+### ⚙️ **Stack Tecnológica**
 
 | Componente     | Tecnologia      | Papel no Pipeline                                                  |
 |:---------------|:----------------|:-------------------------------------------------------------------|
@@ -32,7 +31,7 @@ O projeto segue o paradigma ELT (Extract, Load, Transform), priorizando o proces
 
 ---
 
-##🚀 **Detalhes Técnicos e Engenharia**
+## 🚀 **Detalhes Técnicos e Engenharia**
 
 1. **Ingestão (Python)**
 * Extração de 5 indicadores macroeconômicos para 6 países emergentes.
@@ -48,7 +47,7 @@ O projeto segue o paradigma ELT (Extract, Load, Transform), priorizando o proces
 
 ---
 
-##✅ **Resultados**
+## ✅ **Resultados**
 
 * **Situação:** Decisões de investimento baseadas em processos manuais e dados não validados.
 * **Tarefa:** Automatizar o fluxo fim a fim com custo zero de infraestrutura.
@@ -57,7 +56,7 @@ O projeto segue o paradigma ELT (Extract, Load, Transform), priorizando o proces
 
 ---
 
-##🔗 **Links e Artefatos**
+## 🔗 **Links e Artefatos**
 
 * **Dashboard Interativo:** https://lookerstudio.google.com/reporting/b6ce62da-b856-4e12-a64c-80e30c5c75a8
 * **Documentação dbt (Lineage):** https://revsonv.github.io/atlas-capital-data-pipeline/#!/overview
@@ -65,7 +64,7 @@ O projeto segue o paradigma ELT (Extract, Load, Transform), priorizando o proces
 
 ---
 
-##🛠️ **Como Reproduzir**
+## 🛠️ **Como Reproduzir**
 
 1. Clone o repositório.
 2. Configure as credenciais do GCP no arquivo .env (local) ou GitHub Secrets.
