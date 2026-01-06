@@ -2,11 +2,13 @@
 
 ---
 
-## 💡 **Cenário de Negócio**
+## 💡 **Simulação de um cenário de negócio**
 
-Atlas Capital é uma empresa <u>fictícia</u>, um pequeno fundo de investimentos focado em mercados emergentes. Seu time de análise sofria com a fragmentação de dados, perdendo cerca de 60% do tempo na coleta manual de dados dos países alvo.
+A **Atlas Capital (empresa fictícia)** é um fundo de investimentos de pequeno porte, especializado em mercados emergentes. Seu time de análise acompanha indicadores macroeconômicos — como PIB, inflação e desemprego — para embasar decisões estratégicas em países-chave da América Latina, Ásia e África.
 
-**Objetivo:** Construir um "sistema de fornecimento de dados" automatizado, transformando dados brutos em um modelo analítico robusto para monitoramento de PIB, Inflação e Desemprego em tempo real. Sem orçamento disponível para tal, a busca por uma solução de custo zero é a prioridade.
+Antes deste projeto, os dados eram coletados manualmente a partir de fontes públicas, gerando retrabalho, inconsistências e alto custo operacional. Com orçamento zero para aquisição de soluções comerciais, surgiu a necessidade de construir um sistema automatizado de fornecimento de dados.
+
+Utilizando apenas ferramentas <u>open source e dados públicos confiáveis</u>, este projeto implementa um pipeline de dados totalmente automatizado, consumindo dados da World Bank Data360, padronizando indicadores macroeconômicos e disponibilizando-os em um Data Warehouse analítico no BigQuery, pronto para análises, visualizações e expansão futura.
 
 ---
 
